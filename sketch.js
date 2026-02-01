@@ -1,17 +1,15 @@
-let state = "title";
-let score = 0;
-let highScore = 0;
-
 let y;
 let speed;
-let gravity = 0.5;
+let score;
+let highScore = 0;
+let state = "title";
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(400, 600);
   textAlign(CENTER, CENTER);
 
   let saved = localStorage.getItem("thread_highscore");
-  if (saved) {
+  if (saved !== null) {
     highScore = int(saved);
   }
 
@@ -19,11 +17,12 @@ function setup() {
 }
 
 function draw() {
-  background(240);
+  background(30);
 
   if (state === "title") {
     drawTitle();
   } else if (state === "play") {
+    updateGame();
     drawGame();
   } else if (state === "gameover") {
     drawGameOver();
@@ -34,59 +33,50 @@ function draw() {
 // タイトル画面
 // =====================
 function drawTitle() {
-  fill(0);
-
+  fill(255);
   textSize(32);
-  text("THREAD MASTER", width / 2, 140);
+  text("Thread Game", width / 2, height / 2 - 40);
 
   textSize(16);
-  text("Tap to Play", width / 2, 200);
-
-  textSize(12);
-  text("Hold = Up / Release = Down", width / 2, 230);
+  text("Click to Start", width / 2, height / 2 + 20);
+  text("High Score: " + highScore, width / 2, height / 2 + 60);
 }
 
 // =====================
-// ゲーム画面
+// ゲーム中
 // =====================
-function drawGame() {
-  fill(0);
-
+function updateGame() {
+  speed += 0.3;
   y += speed;
-  speed += gravity;
 
-  if (mouseIsPressed) {
-    speed = -5;
-  }
-}
-
-  ellipse(width / 2, y, 20, 20);
-
-  score++;
-  textSize(16);
-  text("Score: " + score, width / 2, 30);
-
-  if (y > height || y < 0) {
+  if (y > height - 20) {
     endGame();
   }
+
+  score++;
+}
+
+function drawGame() {
+  fill(255);
+  ellipse(width / 2, y, 30, 30);
+
+  textSize(16);
+  text("Score: " + score, width / 2, 20);
+  text("High: " + highScore, width / 2, 40);
 }
 
 // =====================
-// ゲームオーバー画面
+// ゲームオーバー
 // =====================
 function drawGameOver() {
-  background(240);
-  fill(0);
-
+  fill(255);
   textSize(32);
-  text("GAME OVER", width / 2, 150);
+  text("Game Over", width / 2, height / 2 - 40);
 
-  textSize(18);
-  text("Score: " + score, width / 2, 200);
-  text("Best: " + highScore, width / 2, 230);
-
-  textSize(14);
-  text("Tap to Retry", width / 2, 280);
+  textSize(16);
+  text("Score: " + score, width / 2, height / 2);
+  text("High Score: " + highScore, width / 2, height / 2 + 30);
+  text("Click to Retry", width / 2, height / 2 + 70);
 }
 
 // =====================
