@@ -1,10 +1,14 @@
 // ===============================
 // 糸通しゲーム 
 // タイトル / リトライ / ハイスコア / HARDモード
+// GitHub Pages対応 完成版
 // ===============================
 
 // 状態
 let state = "title"; // "title", "play", "gameover"
+
+// フォント
+let gameFont;
 
 // 糸の先端（見えない）
 let headX = 80;
@@ -26,18 +30,30 @@ let highScore = 0;
 let hardMode = false;
 
 // ===============================
+// フォント読み込み
+// ===============================
+function preload() {
+  gameFont = loadFont(
+    "https://fonts.gstatic.com/s/pressstart2p/v15/e3t4euG6d9k6G9Y.woff"
+  );
+}
+
+// ===============================
 // 初期化
 // ===============================
 function setup() {
-  createCanvas(400, 400);
+  const c = createCanvas(400, 400);
+  c.parent(document.body);
+
+  pixelDensity(1); // ← 見た目ズレ防止（超重要）
+  textFont(gameFont);
   textAlign(CENTER, CENTER);
+  strokeWeight(3);
 
   let saved = localStorage.getItem("thread_highscore");
   if (saved) {
     highScore = int(saved);
   }
-
-  resetGame();
 }
 
 // ===============================
@@ -60,16 +76,16 @@ function draw() {
 // ===============================
 function drawTitle() {
   fill(0);
+  noStroke();
 
-  textSize(32);
+  textSize(28);
   text("THREAD MASTER", width / 2, 120);
 
-  textSize(16);
+  textSize(14);
   text("Tap to Start", width / 2, 200);
 
-  textSize(12);
+  textSize(10);
   text("Hold = Up / Release = Down", width / 2, 230);
-
   text("Press H = HARD MODE", width / 2, 260);
 
   text("Best: " + highScore, width / 2, 300);
@@ -109,25 +125,31 @@ function drawGame() {
     endGame();
   }
 
+  // ==================
   // 描画
-  // 糸
+  // ==================
   stroke(0);
+
+  // 糸
   line(headX - 40, y, headX, y);
   noStroke();
   ellipse(headX, y, 6, 6);
 
   // 針
+  fill(100);
   rect(needleX, needleY - needleGap / 2 - 40, 10, 40);
   rect(needleX, needleY + needleGap / 2, 10, 40);
 
   // UI
   fill(0);
-  textSize(14);
-  text("Score: " + score, 60, 20);
-  text("Best: " + highScore, 140, 20);
+  textSize(12);
+  textAlign(LEFT, CENTER);
+  text("Score: " + score, 10, 20);
+  text("Best: " + highScore, 110, 20);
 
   if (hardMode) {
-    text("HARD", width - 50, 20);
+    textAlign(RIGHT, CENTER);
+    text("HARD", width - 10, 20);
   }
 }
 
@@ -139,14 +161,14 @@ function drawGameOver() {
   fill(0);
   textAlign(CENTER, CENTER);
 
-  textSize(32);
+  textSize(28);
   text("GAME OVER", width / 2, 150);
 
-  textSize(18);
+  textSize(14);
   text("Score: " + score, width / 2, 200);
   text("Best: " + highScore, width / 2, 230);
 
-  textSize(14);
+  textSize(12);
   text("Tap to Retry", width / 2, 280);
 }
 
