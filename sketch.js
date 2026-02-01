@@ -34,7 +34,6 @@ function endGame() {
     highScore = score;
     localStorage.setItem("thread_highscore", highScore);
   }
-}
 
 // ===============================
 // 入力
