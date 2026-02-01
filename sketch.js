@@ -52,24 +52,19 @@ function drawTitle() {
 function drawGame() {
   fill(0);
 
-  // 重力
   y += speed;
   speed += gravity;
 
-  // 上昇
   if (mouseIsPressed) {
     speed = -5;
   }
 
-  // 円を表示
   ellipse(width / 2, y, 20, 20);
 
-  // スコア
   score++;
   textSize(16);
   text("Score: " + score, width / 2, 30);
 
-  // 画面外でゲームオーバー
   if (y > height || y < 0) {
     endGame();
   }
