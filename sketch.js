@@ -58,6 +58,7 @@ function drawGame() {
   if (mouseIsPressed) {
     speed = -5;
   }
+}
 
   ellipse(width / 2, y, 20, 20);
 
