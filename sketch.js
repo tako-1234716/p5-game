@@ -1,16 +1,11 @@
 // ===============================
-// 糸通しゲーム 
-// タイトル / リトライ / ハイスコア / HARDモード
-// GitHub Pages対応 完成版
+// 糸通しゲーム（p5 Web Editor風）
 // ===============================
 
 // 状態
 let state = "title"; // "title", "play", "gameover"
 
-// フォント
-let gameFont;
-
-// 糸の先端（見えない）
+// 糸の先端
 let headX = 80;
 let y = 200;
 let speedY = 0;
@@ -30,30 +25,28 @@ let highScore = 0;
 let hardMode = false;
 
 // ===============================
-// フォント読み込み
-// ===============================
-function preload() {
-  gameFont = loadFont(
-    "https://fonts.gstatic.com/s/pressstart2p/v15/e3t4euG6d9k6G9Y.woff"
-  );
-}
-
-// ===============================
 // 初期化
 // ===============================
 function setup() {
-  const c = createCanvas(400, 400);
-  c.parent(document.body);
+  createCanvas(windowWidth, windowHeight * 0.7); // ← スマホで画面いっぱい
+  pixelDensity(1);
 
-  pixelDensity(1); // ← 見た目ズレ防止（超重要）
-  textFont(gameFont);
-  textAlign(CENTER, CENTER);
-  strokeWeight(3);
+  textAlign(LEFT, TOP);
+  strokeWeight(1); // ← 細い線（元と同じ）
 
   let saved = localStorage.getItem("thread_highscore");
   if (saved) {
     highScore = int(saved);
   }
+
+  resetGame();
+}
+
+// ===============================
+// リサイズ対応
+// ===============================
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight * 0.7);
 }
 
 // ===============================
@@ -72,23 +65,18 @@ function draw() {
 }
 
 // ===============================
-// タイトル画面
+// タイトル
 // ===============================
 function drawTitle() {
   fill(0);
-  noStroke();
-
-  textSize(28);
-  text("THREAD MASTER", width / 2, 120);
+  textSize(24);
+  text("THREAD MASTER", 20, 40);
 
   textSize(14);
-  text("Tap to Start", width / 2, 200);
-
-  textSize(10);
-  text("Hold = Up / Release = Down", width / 2, 230);
-  text("Press H = HARD MODE", width / 2, 260);
-
-  text("Best: " + highScore, width / 2, 300);
+  text("Tap to Start", 20, 80);
+  text("Hold = Up / Release = Down", 20, 110);
+  text("Press H = HARD MODE", 20, 140);
+  text("Best: " + highScore, 20, 180);
 }
 
 // ===============================
@@ -133,47 +121,44 @@ function drawGame() {
   // 糸
   line(headX - 40, y, headX, y);
   noStroke();
-  ellipse(headX, y, 6, 6);
+  ellipse(headX, y, 5, 5);
 
   // 針
-  fill(100);
+  fill(120);
   rect(needleX, needleY - needleGap / 2 - 40, 10, 40);
   rect(needleX, needleY + needleGap / 2, 10, 40);
 
   // UI
   fill(0);
-  textSize(12);
-  textAlign(LEFT, CENTER);
-  text("Score: " + score, 10, 20);
-  text("Best: " + highScore, 110, 20);
+  textSize(14);
+  text("Score: " + score, 10, 10);
+  text("Best: " + highScore, width - 100, 10);
 
   if (hardMode) {
-    textAlign(RIGHT, CENTER);
-    text("HARD", width - 10, 20);
+    text("HARD", width - 60, 40);
   }
 }
 
 // ===============================
-// ゲームオーバー画面
+// ゲームオーバー
 // ===============================
 function drawGameOver() {
   background(240);
   fill(0);
-  textAlign(CENTER, CENTER);
 
-  textSize(28);
-  text("GAME OVER", width / 2, 150);
+  textSize(32);
+  text("GAME OVER", 20, 100);
+
+  textSize(18);
+  text("Score: " + score, 20, 150);
+  text("Best: " + highScore, 20, 180);
 
   textSize(14);
-  text("Score: " + score, width / 2, 200);
-  text("Best: " + highScore, width / 2, 230);
-
-  textSize(12);
-  text("Tap to Retry", width / 2, 280);
+  text("Tap to Retry", 20, 220);
 }
 
 // ===============================
-// ゲーム制御
+// 制御
 // ===============================
 function resetGame() {
   y = height / 2;
@@ -207,9 +192,7 @@ function endGame() {
 // 入力
 // ===============================
 function mousePressed() {
-  if (state === "title") {
-    resetGame();
-  } else if (state === "gameover") {
+  if (state === "title" || state === "gameover") {
     resetGame();
   }
 }
