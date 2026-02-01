@@ -7,7 +7,6 @@
 
   textSize(12);
   text("Hold = Up / Release = Down", width / 2, 230);
-}
 
 function drawGameOver() {
   background(240);
