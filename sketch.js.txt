@@ -1,0 +1,49 @@
+
+  textSize(32);
+  text("THREAD MASTER", width / 2, 140);
+
+  textSize(16);
+  text("Tap to Play", width / 2, 200);
+
+  textSize(12);
+  text("Hold = Up / Release = Down", width / 2, 230);
+}
+
+function drawGameOver() {
+  background(240);
+  fill(0);
+  textAlign(CENTER, CENTER);
+
+  textSize(32);
+  text("GAME OVER", width / 2, 150);
+
+  textSize(18);
+  text("Score: " + score, width / 2, 200);
+  text("Best: " + highScore, width / 2, 230);
+
+  textSize(14);
+  text("Tap to Retry", width / 2, 280);
+}
+
+// ===============================
+// ゲーム制御
+// ===============================
+function endGame() {
+  state = "gameover";
+
+  if (score > highScore) {
+    highScore = score;
+    localStorage.setItem("thread_highscore", highScore);
+  }
+}
+
+// ===============================
+// 入力
+// ===============================
+function mousePressed() {
+  if (state === "title") {
+    resetGame();
+  } else if (state === "gameover") {
+    resetGame();
+  }
+}
